@@ -1,0 +1,14 @@
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+seaborn
+mne
+torch
+torchvision
+tqdm
+pyyaml
+einops
+shap
+jupyter
