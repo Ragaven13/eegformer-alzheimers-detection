@@ -1,7 +1,6 @@
 from torch.utils.data import DataLoader
 
-from eeg_dataset import EEGWindowDataset
-
+from src.data.eeg_dataset import EEGWindowDataset
 
 BATCH_SIZE = 32
 
