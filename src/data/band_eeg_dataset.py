@@ -90,6 +90,14 @@ class BandEEGDataset(Dataset):
         x = X_subject[sample["index"]]
         y = sample["y"]
 
+        x = x.astype("float32")
+
+        mean = x.mean()
+        std = x.std()
+
+        if std > 0:
+            x = (x - mean) / std
+
         x = torch.tensor(x, dtype=torch.float32)
         y = torch.tensor(y, dtype=torch.long)
 
