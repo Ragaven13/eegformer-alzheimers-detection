@@ -1,0 +1,6 @@
+Model,Input Type,Accuracy,Macro F1,Notes
+Random Forest,Statistical EEG features,0.3749,0.3360,Mean std min max power features
+CNN,Normalized raw EEG windows,0.3894,0.3581,1D CNN baseline
+LSTM,Normalized raw EEG windows,0.4299,0.4090,BiLSTM temporal baseline
+Transformer,Normalized raw EEG windows,0.3920,0.3447,Patch-based Transformer baseline
+EEGFormer,Normalized multi-band EEG windows,0.7133,0.6896,Proposed multi-band cross-band Transformer
