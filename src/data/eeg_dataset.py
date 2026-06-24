@@ -62,6 +62,14 @@ class EEGWindowDataset(Dataset):
         window = self.X[index]
         label = self.y[index]
 
+        window = window.astype("float32")
+
+        mean = window.mean()
+        std = window.std()
+
+        if std > 0:
+            window = (window - mean) / std
+
         window = torch.tensor(window, dtype=torch.float32)
         label = torch.tensor(label, dtype=torch.long)
 
