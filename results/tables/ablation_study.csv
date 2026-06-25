@@ -1,0 +1,8 @@
+Experiment,Accuracy,Macro F1,Interpretation
+Delta Only,0.4653,0.4533,Single-band delta performance
+Theta Only,0.5215,0.4536,Single-band theta performance
+Alpha Only,0.5190,0.4598,Single-band alpha performance
+Beta Only,0.5070,0.4685,Single-band beta performance
+Gamma Only,0.4810,0.4833,Single-band gamma performance
+EEGFormer No Cross-Attention,0.5709,0.5604,Band encoders without cross-band attention
+Full EEGFormer,0.7133,0.6896,Full multi-band cross-attention model
