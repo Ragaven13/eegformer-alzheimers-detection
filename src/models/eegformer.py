@@ -1,5 +1,13 @@
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.append(str(PROJECT_ROOT))
+
 import torch
 import torch.nn as nn
+
+from src.models.cross_band_attention import CrossBandAttention
 
 
 class BandEncoder(nn.Module):
@@ -31,7 +39,7 @@ class BandEncoder(nn.Module):
 
 class EEGFormer(nn.Module):
     """
-    Multi-Band EEG Transformer for dementia classification.
+    EEGFormer with explicit cross-band attention.
 
     Input:
         (batch, 5, 19, 2500)
@@ -39,7 +47,7 @@ class EEGFormer(nn.Module):
     Meaning:
         5    = Delta, Theta, Alpha, Beta, Gamma
         19   = EEG electrodes
-        2500 = 5-second window samples
+        2500 = EEG samples per 5-second window
 
     Output:
         (batch, 3)
@@ -51,7 +59,6 @@ class EEGFormer(nn.Module):
         num_channels=19,
         embed_dim=128,
         num_heads=4,
-        num_layers=2,
         num_classes=3,
         dropout=0.3,
     ):
@@ -73,17 +80,10 @@ class EEGFormer(nn.Module):
             torch.randn(1, num_bands, embed_dim)
         )
 
-        encoder_layer = nn.TransformerEncoderLayer(
-            d_model=embed_dim,
-            nhead=num_heads,
-            dim_feedforward=embed_dim * 4,
+        self.cross_band_attention = CrossBandAttention(
+            embed_dim=embed_dim,
+            num_heads=num_heads,
             dropout=dropout,
-            batch_first=True,
-        )
-
-        self.cross_band_transformer = nn.TransformerEncoder(
-            encoder_layer,
-            num_layers=num_layers,
         )
 
         self.classifier = nn.Sequential(
@@ -104,13 +104,16 @@ class EEGFormer(nn.Module):
 
         band_tokens = band_tokens + self.band_position_embedding
 
-        band_tokens = self.cross_band_transformer(band_tokens)
+        band_tokens = self.cross_band_attention(band_tokens)
 
         pooled = band_tokens.mean(dim=1)
 
         logits = self.classifier(pooled)
 
         return logits
+
+    def get_attention_weights(self):
+        return self.cross_band_attention.attention_weights
 
 
 if __name__ == "__main__":
@@ -120,8 +123,11 @@ if __name__ == "__main__":
 
     output = model(dummy_input)
 
+    attention_weights = model.get_attention_weights()
+
     print("=" * 60)
     print("EEGFORMER TEST")
     print("=" * 60)
     print("Input shape:", dummy_input.shape)
     print("Output shape:", output.shape)
+    print("Attention shape:", attention_weights.shape)
