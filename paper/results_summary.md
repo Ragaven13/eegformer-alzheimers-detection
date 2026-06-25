@@ -80,3 +80,34 @@ This shows that both multi-band representation and cross-band attention are impo
 | EEGFormer | 596,547 | 0.002490 |
 
 EEGFormer contains the highest number of parameters among the evaluated models but still maintains low inference latency (~2.49 ms per sample) while achieving the best classification performance.
+
+## ROC-AUC Results
+
+| Class | ROC-AUC |
+|---|---:|
+| Alzheimer's | 0.7824 |
+| Healthy Control | 0.8308 |
+| FTD | 0.7978 |
+
+## Precision-Recall Results
+
+| Class | Average Precision |
+|---|---:|
+| Alzheimer's | 0.6341 |
+| Healthy Control | 0.8340 |
+| FTD | 0.5913 |
+
+## Cross-Band Attention Interpretation
+
+EEGFormer attention analysis showed strong cross-band interactions involving Gamma and Alpha activity.
+
+The strongest interactions included:
+
+| Query Band | Attended Band | Attention Weight |
+|---|---|---:|
+| Delta | Gamma | 0.456 |
+| Alpha | Gamma | 0.436 |
+| Beta | Gamma | 0.470 |
+| Gamma | Alpha | 0.294 |
+
+This suggests that EEGFormer does not treat frequency bands independently. Instead, it learns interactions between neural rhythms, supporting the proposed cross-band attention mechanism.
