@@ -25,3 +25,47 @@ The results suggest that explicit frequency-band decomposition and cross-band mo
 | Alzheimer's | 749 | 164 | 104 |
 | Healthy | 170 | 688 | 21 |
 | FTD | 161 | 53 | 237 |
+
+## Ablation Study
+
+| Experiment | Accuracy | Macro F1 |
+|---|---:|---:|
+| Delta Only | 0.4653 | 0.4533 |
+| Theta Only | 0.5215 | 0.4536 |
+| Alpha Only | 0.5190 | 0.4598 |
+| Beta Only | 0.5070 | 0.4685 |
+| Gamma Only | 0.4810 | 0.4833 |
+| EEGFormer No Cross-Attention | 0.5709 | 0.5604 |
+| Full EEGFormer | **0.7133** | **0.6896** |
+
+
+
+## Ablation Study
+
+| Experiment | Accuracy | Macro F1 |
+|---|---:|---:|
+| Delta Only | 0.4653 | 0.4533 |
+| Theta Only | 0.5215 | 0.4536 |
+| Alpha Only | 0.5190 | 0.4598 |
+| Beta Only | 0.5070 | 0.4685 |
+| Gamma Only | 0.4810 | 0.4833 |
+| EEGFormer No Cross-Attention | 0.5709 | 0.5604 |
+| Full EEGFormer | **0.7133** | **0.6896** |
+
+## Ablation Interpretation
+
+| Experiment | Accuracy | Macro F1 |
+|---|---:|---:|
+| Delta Only | 0.4653 | 0.4533 |
+| Theta Only | 0.5215 | 0.4536 |
+| Alpha Only | 0.5190 | 0.4598 |
+| Beta Only | 0.5070 | 0.4685 |
+| Gamma Only | 0.4810 | 0.4833 |
+| EEGFormer No Cross-Attention | 0.5709 | 0.5604 |
+| Full EEGFormer | **0.7133** | **0.6896** |
+
+## Ablation Interpretation
+
+No individual EEG frequency band achieved performance close to the full EEGFormer model. Removing cross-band attention reduced accuracy from 0.7133 to 0.5709.
+
+This shows that both multi-band representation and cross-band attention are important for dementia classification.
