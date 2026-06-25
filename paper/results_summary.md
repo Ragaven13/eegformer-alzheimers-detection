@@ -69,3 +69,14 @@ The results suggest that explicit frequency-band decomposition and cross-band mo
 No individual EEG frequency band achieved performance close to the full EEGFormer model. Removing cross-band attention reduced accuracy from 0.7133 to 0.5709.
 
 This shows that both multi-band representation and cross-band attention are important for dementia classification.
+
+## Model Complexity Analysis
+
+| Model | Parameters | Inference Time (sec/sample) |
+|-------|------------:|----------------------------:|
+| CNN | 40,131 | 0.000429 |
+| LSTM | 143,235 | 0.057870 |
+| Transformer | 525,571 | 0.000823 |
+| EEGFormer | 596,547 | 0.002490 |
+
+EEGFormer contains the highest number of parameters among the evaluated models but still maintains low inference latency (~2.49 ms per sample) while achieving the best classification performance.

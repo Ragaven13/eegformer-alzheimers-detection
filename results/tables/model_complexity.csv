@@ -1,0 +1,5 @@
+Model,Parameters,Inference_Time_sec
+CNN,40131,0.000429
+LSTM,143235,0.057870
+Transformer,525571,0.000823
+EEGFormer,596547,0.002490
