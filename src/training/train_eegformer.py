@@ -4,6 +4,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(PROJECT_ROOT))
 
+import pandas as pd
 import torch
 import torch.nn as nn
 from torch.optim import Adam
@@ -16,6 +17,7 @@ from src.models.eegformer import EEGFormer
 EPOCHS = 10
 LEARNING_RATE = 1e-4
 CHECKPOINT_PATH = "results/checkpoints/eegformer.pt"
+HISTORY_PATH = "results/history/eegformer_history.csv"
 
 LABEL_NAMES = ["Alzheimer's", "Healthy Control", "FTD"]
 
@@ -88,6 +90,16 @@ def evaluate(model, data_loader, criterion, device):
     return total_loss / len(data_loader), acc, f1, all_labels, all_preds
 
 
+def save_history(history):
+    history_dir = Path("results/history")
+    history_dir.mkdir(parents=True, exist_ok=True)
+
+    history_df = pd.DataFrame(history)
+    history_df.to_csv(HISTORY_PATH, index=False)
+
+    print(f"\nSaved training history to: {HISTORY_PATH}")
+
+
 def main():
     device = get_device()
 
@@ -105,6 +117,16 @@ def main():
 
     best_val_f1 = 0.0
 
+    history = {
+        "epoch": [],
+        "train_loss": [],
+        "val_loss": [],
+        "train_acc": [],
+        "val_acc": [],
+        "train_f1": [],
+        "val_f1": [],
+    }
+
     for epoch in range(EPOCHS):
         train_loss, train_acc, train_f1 = train_one_epoch(
             model,
@@ -121,6 +143,14 @@ def main():
             device,
         )
 
+        history["epoch"].append(epoch + 1)
+        history["train_loss"].append(train_loss)
+        history["val_loss"].append(val_loss)
+        history["train_acc"].append(train_acc)
+        history["val_acc"].append(val_acc)
+        history["train_f1"].append(train_f1)
+        history["val_f1"].append(val_f1)
+
         print(
             f"Epoch [{epoch + 1}/{EPOCHS}] "
             f"Train Loss: {train_loss:.4f} "
@@ -135,6 +165,8 @@ def main():
             best_val_f1 = val_f1
             torch.save(model.state_dict(), CHECKPOINT_PATH)
             print("Saved best EEGFormer model")
+
+    save_history(history)
 
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
